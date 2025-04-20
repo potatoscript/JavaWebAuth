@@ -130,9 +130,17 @@ public class User {
 ### ✅ Step 5: Create `UserRepository`
 
 ```java
+package com.example.JavaWebAuth.repository;
+
+import com.example.JavaWebAuth.model.User;
+import org.springframework.data.jpa.repository.JpaRepository;
+
+import java.util.Optional;
+
 public interface UserRepository extends JpaRepository<User, Long> {
     Optional<User> findByUsername(String username);
 }
+
 ```
 
 ---
