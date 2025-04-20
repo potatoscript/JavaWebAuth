@@ -126,6 +126,19 @@ public class AuthController {
 }
 ```
 
+#### 🔧 Folder structure in `src/main/java` should look like:
+
+```
+JavaWebAuth/backend/src/main/java/com/example/javawebauth/
+├── controller/
+│   └── AuthController.java
+├── model/
+│   └── User.java
+├── repository/
+│   └── UserRepository.java   ✅ ← create it here!
+└── JavaWebAuthApplication.java
+```
+
 ---
 
 ## ☁️ 2. Deploy Backend to Railway
