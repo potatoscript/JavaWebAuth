@@ -148,31 +148,49 @@ public interface UserRepository extends JpaRepository<User, Long> {
 ### ✅ Step 6: Create AuthController
 
 ```java
+package com.example.JavaWebAuth.controller;
+
+import com.example.JavaWebAuth.model.User;
+import com.example.JavaWebAuth.repository.UserRepository;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.Optional;
+
 @RestController
 @RequestMapping("/api/auth")
-@CrossOrigin(origins = "*") // Allow frontend to access
+@CrossOrigin(origins = "*") // allow all for demo — adjust in production
 public class AuthController {
 
     @Autowired
-    private UserRepository userRepo;
+    private UserRepository userRepository;
 
+    // POST /api/auth/register
     @PostMapping("/register")
-    public ResponseEntity<String> register(@RequestBody User user) {
-        if (userRepo.findByUsername(user.getUsername()).isPresent()) {
-            return ResponseEntity.status(HttpStatus.CONFLICT).body("Username already exists");
+    public String register(@RequestBody User user) {
+        Optional<User> existingUser = userRepository.findByUsername(user.getUsername());
+
+        if (existingUser.isPresent()) {
+            return "Username already exists!";
         }
-        userRepo.save(user);
-        return ResponseEntity.ok("User registered");
+
+        userRepository.save(user);
+        return "Registration successful!";
     }
 
+    // POST /api/auth/login
     @PostMapping("/login")
-    public ResponseEntity<String> login(@RequestBody User user) {
-        return userRepo.findByUsername(user.getUsername())
-            .filter(u -> u.getPassword().equals(user.getPassword()))
-            .map(u -> ResponseEntity.ok("Login successful"))
-            .orElse(ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid credentials"));
+    public String login(@RequestBody User user) {
+        Optional<User> existingUser = userRepository.findByUsername(user.getUsername());
+
+        if (existingUser.isPresent() && existingUser.get().getPassword().equals(user.getPassword())) {
+            return "Login successful!";
+        } else {
+            return "Invalid username or password!";
+        }
     }
 }
+
 ```
 
 #### 🔧 Folder structure in `src/main/java` should look like:
